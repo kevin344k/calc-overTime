@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import React, { useState } from "react";
+import React, { useState,Component } from "react";
 import { Image } from "expo-image";
 import {
   StyleSheet,
@@ -7,8 +7,10 @@ import {
   TextInput,
   View,
   Pressable,
-  Alert,
+  Alert,ScrollView
 } from "react-native";
+import Table from "./assets/components/Table";
+
 
 export default function App() {
   const [salario, setSalario] = useState("");
@@ -68,7 +70,9 @@ export default function App() {
   };
 
   return (
+
     <View style={styles.container}>
+      <ScrollView>
       <View style={styles.containerTitle}>
         <Text style={styles.title}>Calculadora de Sobretiempo</Text>
       </View>
@@ -137,6 +141,12 @@ export default function App() {
         </View>
       </View>
       {/* END PRECIO DE LAS HORAS  */}
+
+{/*start table component*/}
+<Table  dias={diasLab} noches={nochesLab} ></Table>
+{/*end table component*/}
+
+
       <View style={styles.containerInputDiasLabResult}>
         {/* resultado al 25%*/}
         <View style={styles.containerTextResult}>
@@ -184,9 +194,12 @@ export default function App() {
           />
         </Pressable>
       </View>
-
-      <StatusBar style="auto" />
+      </ScrollView>
+      <StatusBar style="light" />
+   
     </View>
+
+   
   );
 }
 
@@ -195,7 +208,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#141e30",
     alignItems: "center",
     flex: 1,
-    paddingHorizontal: 20,
+    paddingHorizontal: 14,
     paddingTop: 30,
   },
   containerTitle: {
