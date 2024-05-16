@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import React, { useState,Component } from "react";
+import React, { useState } from "react";
 import { Image } from "expo-image";
 import {
   StyleSheet,
@@ -16,6 +16,7 @@ export default function App() {
   const [salario, setSalario] = useState("");
   const [diasLab, setDiasLab] = useState("");
   const [nochesLab, setNochesLab] = useState("");
+  const [isActive, setIsActive] = useState(false);
 
   const [noches25, setNoches25] = useState(0);
   const [hor50, setHor50] = useState(0);
@@ -39,6 +40,7 @@ export default function App() {
 
   const onPressFunction = () => {
     if (salario != 0 && salario != "" && diasLab != "" && nochesLab != "") {
+      setIsActive(true)
       setNoches25(nochesLab * jornadaNocheX25);
 
       setHor50(nochesLab * jornadaNocheX50 + diasLab * jornadaDiaX50);
@@ -58,6 +60,7 @@ export default function App() {
           nochesLab * jornadaNochex100 * preHoraAl100
       );
     } else {
+      setIsActive(false)
       Alert.alert("Ingresa el salario/Dias y Noches");
     }
   };
@@ -67,6 +70,7 @@ export default function App() {
     setDiasLab("");
     setSalario("");
     setNochesLab("");
+    setIsActive(false)
   };
 
   return (
@@ -79,7 +83,7 @@ export default function App() {
       {/* Input salario basico*/}
       <View style={styles.containerInput}>
         <View style={styles.containerTitleInput}>
-          <Text style={styles.titleInput}>S. Básico</Text>
+          <Text style={styles.titleInput}>Sueldo Básico</Text>
         </View>
         <TextInput
           style={styles.textInput}
@@ -121,7 +125,7 @@ export default function App() {
         </Pressable>
       </View>
       {/* contenedor para el resultado*/}
-      <Text style={styles.titleInputDias}>Detalle de las horas:</Text>
+      <Text style={{color:"white",textAlign:"center",marginBottom:8,}}>Detalle de las horas:</Text>
       {/* PRECIO DE LAS HORAS  */}
       <View style={styles.containerAllPrecioHora}>
         <View style={{width:"100%",alignItems:"center",paddingVertical:3,}}>
@@ -130,8 +134,8 @@ export default function App() {
         <View style={styles.containerPrecioHora}>
         <Text>Normal</Text>
           <Text>25%</Text>
-          <Text>50%</Text>
-          <Text>100%</Text>
+          <Text>+50%</Text>
+          <Text>+100%</Text>
         </View>
         <View style={styles.containerPrecioHora}>
         <Text>{preHoraNormal}</Text>
@@ -143,11 +147,16 @@ export default function App() {
       {/* END PRECIO DE LAS HORAS  */}
 
 {/*start table component*/}
-<Table  dias={diasLab} noches={nochesLab} ></Table>
+
+{isActive?<Table  dias={diasLab} noches={nochesLab} ></Table>:
+console.log(isActive)
+}
+
 {/*end table component*/}
 
 
       <View style={styles.containerInputDiasLabResult}>
+        <Text style={{color:"white"}}>Total de horas</Text>
         {/* resultado al 25%*/}
         <View style={styles.containerTextResult}>
           <View style={styles.containerSecondResult}>
@@ -180,7 +189,7 @@ export default function App() {
           </View>
         </View>
       </View>
-      <Text style={[styles.titleInputDias, { marginTop: 12 }]}>
+      <Text style={{ marginTop: 12 ,color:"white"}}>
         Total $ en sobretiempo:
       </Text>
       <View style={styles.containerCardResult}>
@@ -194,6 +203,7 @@ export default function App() {
           />
         </Pressable>
       </View>
+      <Text style={{textAlign:"center",color:"white",marginBottom:12}}>creado por Kevin A.</Text>
       </ScrollView>
       <StatusBar style="light" />
    
@@ -209,7 +219,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     flex: 1,
     paddingHorizontal: 14,
-    paddingTop: 30,
+    paddingTop: 50,
   },
   containerTitle: {
     paddingBottom: 15,
@@ -298,7 +308,7 @@ const styles = StyleSheet.create({
     borderRadius: 3,
     width: "100%",
     marginTop: 12,
-    backgroundColor: "#294a7b",
+    backgroundColor: "gray",
     justifyContent: "space-around",
     paddingVertical: 8,
   },

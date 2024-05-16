@@ -1,68 +1,33 @@
-/*import React from "react";
-import {
-  SafeAreaView,
-  View,
-  FlatList,
-  StyleSheet,
-  Text,
-} from "react-native";
-
-const Table = () => {
-  return (
-    <View style={styles.container}>
-
-
-        <SafeAreaView>
-      <FlatList  data=
-        {[
-          { key: "Devin" },
-          { key: "1" },
-          { key: "2" },
-          { key: "3" },
-          { key: "4" },
-        ]}
-        renderItem={({item}) => <Text style={styles.item}>{item.key}</Text>}
-        >
-       
-      </FlatList>
-      </SafeAreaView>
-    </View>
-  );
-};
-export default Table;
-
-const styles = StyleSheet.create({
-  container: {},
-});
-*/
-
 import React, { Component } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Table, TableWrapper, Row, Rows, Col } from 'react-native-table-component';
+import { Table, TableWrapper, Row, Rows, Col, Cols, Cell } from 'react-native-reanimated-table';
+
 
 export default class ExampleTwo extends Component {
 
 
-
   constructor(props) {
+ 
     super(props);
     this.state = {
       tableHead: ['%', 'Días', 'x Horas', 'H. Jornada','Total'],
       tableTitle: ['Noche al 100', 'Dia al 50', 'Noche al 50', 'Noche al 25'],
       tableData: [
-        ['9', 'x2 horas', '2.75',"24.75"],
-        ['10', 'x1.5 horas', '4',"40"],
-        ['9', 'x1.5 horas', '1.25',"11.25"],
-        ['9', 'x0.25 horas', '8',"72"]
+        [this.props.noches, 'x2 horas', '2.75',(this.props.noches)*2.75],
+        [this.props.dias, 'x1.5 horas', '4',(this.props.dias)*4],
+        [this.props.noches, 'x1.5 horas', '1.25',(this.props.noches)*1.25],
+        [this.props.noches, 'x0.25 horas', '8',(this.props.noches)*8]
       ]
     }
+console.log(this.props);
   }
 
   render() {
+    
     const state = this.state;
     return (
       <View style={styles.container}>
-        <Table borderStyle={{borderWidth: 1}}>
+        <Table borderStyle={{borderWidth:1}}>
           <Row data={state.tableHead} flexArr={[1, 1, 1, 1]}  style={styles.head} textStyle={styles.text}/>
           <TableWrapper style={styles.wrapper}>
             <Col data={state.tableTitle} style={styles.title} heightArr={[40,40,40,40]} textStyle={styles.text}/>
