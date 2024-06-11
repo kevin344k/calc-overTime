@@ -1,6 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useState } from "react";
-import { Image } from "expo-image";
+
 import {
   StyleSheet,
   Text,
@@ -16,6 +16,7 @@ export default function App() {
   const [salario, setSalario] = useState("");
   const [diasLab, setDiasLab] = useState("");
   const [nochesLab, setNochesLab] = useState("");
+  const [sobretiempo, setSobretiempo] = useState(0);
   const [isActive, setIsActive] = useState(false);
 
   const [noches25, setNoches25] = useState(0);
@@ -25,6 +26,7 @@ export default function App() {
   const [valor25, setValor25] = useState(0);
   const [valor50, setValor50] = useState(0);
   const [valor100, setValor100] = useState(0);
+
 
   let jornadaNocheX25 = 8;
   let jornadaNocheX50 = 1.25;
@@ -57,7 +59,7 @@ export default function App() {
         nochesLab * jornadaNocheX25 * preHoraAl25 +
           (nochesLab * jornadaNocheX50 + diasLab * jornadaDiaX50) *
             preHoraAl50 +
-          nochesLab * jornadaNochex100 * preHoraAl100
+          nochesLab * jornadaNochex100 * preHoraAl100+preHoraAl100*sobretiempo
       );
     } else {
       setIsActive(false)
@@ -70,6 +72,7 @@ export default function App() {
     setDiasLab("");
     setSalario("");
     setNochesLab("");
+    setSobretiempo("");
     setIsActive(false)
   };
 
@@ -92,6 +95,7 @@ export default function App() {
           autoFocus={true}
           inputMode="numeric"
         />
+          
       </View>
 
       <View style={styles.containerInputDiasNoches}>
@@ -118,11 +122,32 @@ export default function App() {
           />
         </View>
       </View>
+
+      {/* input for sobretiempos (al 100%)*/}
+      <View style={styles.containerInputDiasLab}>
+          <Text style={styles.titleInputDias}>Sobretiempo(horas)</Text>
+
+          <TextInput
+            style={styles.textInputSobretiempos}
+            onChangeText={(text) => setSobretiempo(text)}
+            inputMode="numeric"
+            value={sobretiempo}
+          />
+        </View>
+        {/* end input for sobretiempos (al 100%)*/}
+
+
+
       {/*boton para el calculo de horas */}
       <View style={styles.containerButt}>
         <Pressable style={styles.button} onPress={onPressFunction}>
           <Text style={styles.textPress}>Calcular</Text>
         </Pressable>
+        <View style={styles.containerButtonTrash}>
+        <Pressable style={styles.buttonTrash} onPress={clearFunction}>
+          <Text style={styles.textPress}>Limpiar</Text>
+        </Pressable>
+      </View>
       </View>
       {/* contenedor para el resultado*/}
       <Text style={{color:"white",textAlign:"center",marginBottom:8,}}>Detalle de las horas:</Text>
@@ -188,6 +213,18 @@ console.log(isActive)
             <Text> {valor100.toFixed(2)}</Text>
           </View>
         </View>
+
+        <View style={styles.containerTextResult}>
+          <View style={styles.containerSecondResult}>
+            <Text>Sobretiempo: </Text>
+            <Text>{sobretiempo}</Text>
+          </View>
+          <View style={styles.containerSecondResult}>
+            <Text>valor($):</Text>
+            <Text> {(preHoraAl100*sobretiempo).toFixed(2)}</Text>
+          </View>
+        </View>
+
       </View>
       <Text style={{ marginTop: 12 ,color:"white"}}>
         Total $ en sobretiempo:
@@ -195,14 +232,7 @@ console.log(isActive)
       <View style={styles.containerCardResult}>
         <Text style={styles.textResultCard}>${Number(total).toFixed(3)}</Text>
       </View>
-      <View style={styles.containerButtonTrash}>
-        <Pressable style={styles.buttonTrash} onPress={clearFunction}>
-          <Image
-            style={styles.imageTrash}
-            source={require("./assets/reload.png")}
-          />
-        </Pressable>
-      </View>
+  
       <Text style={{textAlign:"center",color:"white",marginBottom:12}}>creado por Kevin A.</Text>
       </ScrollView>
       <StatusBar style="light" />
@@ -222,7 +252,7 @@ const styles = StyleSheet.create({
     paddingTop: 50,
   },
   containerTitle: {
-    paddingBottom: 15,
+    paddingBottom: 10,
     marginBottom: 15,
     borderColor: "#b02a37",
     borderBottomWidth: 2,
@@ -237,17 +267,18 @@ const styles = StyleSheet.create({
   },
   title: {
     color: "#b02a37",
-    fontSize: 24,
+    fontSize: 20,
     width: "100%",
     fontWeight: "bold",
+    textAlign:"center",
   },
   titleInput: {
-    color: "#495057",
+    color: "#f4f5f7",
   },
   containerTitleInput: {
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#f8f9fa",
+    backgroundColor: "#545e66",
     fontSize: 20,
     paddingHorizontal: 8,
     borderRightWidth: 1,
@@ -267,8 +298,21 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 6,
     paddingHorizontal: 5,
   },
-  titleInputDias: {
+
+  textInputSobretiempos: {
+    backgroundColor: "#ccd1d5",
     fontSize: 20,
+    height: 30,
+    width: 150,
+   borderRadius:6,
+    paddingHorizontal: 5,
+  },
+
+
+
+  
+  titleInputDias: {
+    fontSize: 14,
     color: "white",
   },
   containerInputDiasLab: {
@@ -283,6 +327,7 @@ const styles = StyleSheet.create({
   containerButt: {
     width: "100%",
     marginTop: 20,
+    
   },
   button: {
     alignItems: "center",
@@ -317,10 +362,15 @@ const styles = StyleSheet.create({
     height: 30,
   },
   buttonTrash: {
-    backgroundColor: "#ffc107",
-    marginTop: 12,
-    padding: 5,
-    borderRadius: 3,
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: 6,
+    paddingHorizontal: 32,
+    borderRadius: 4,
+    elevation: 3,
+    backgroundColor: "#a11313",
+    marginBottom: 10,
+    width:"100%",
   },
   containerButtonTrash: {
     alignItems: "flex-start",
